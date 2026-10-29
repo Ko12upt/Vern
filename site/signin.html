@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in — Horizontal Boring, Plus</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#18181c">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23378add' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23378add'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html" aria-label="Horizontal Boring, Plus — home">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="13" />
+        <circle cx="16" cy="16" r="7.5" />
+        <circle cx="16" cy="16" r="2.6" class="fill" />
+        <path d="M16 3v5.5M16 23.5V29M3 16h5.5M23.5 16H29" />
+      </svg>
+      <span class="brand-text">Horizontal Boring<span class="plus">, Plus</span></span>
+    </a>
+    <nav class="nav" aria-label="Primary"></nav>
+    <div class="header-actions">
+      <a class="btn btn-ghost btn-sm" href="index.html">← Back to site</a>
+    </div>
+  </div>
+</header>
+
+<main class="auth">
+  <div class="hero-grid-lines" aria-hidden="true"></div>
+  <div class="auth-card wrap">
+    <form class="panel" id="signin-form" novalidate>
+      <div class="panel-head">
+        <p class="eyebrow" style="margin:0"><span class="dot"></span>Account</p>
+      </div>
+      <div class="form-body">
+        <div class="field">
+          <label for="s-user">Username or email</label>
+          <input id="s-user" name="username" type="text" autocomplete="username" required autofocus>
+        </div>
+        <div class="field">
+          <label for="s-pass">Password</label>
+          <input id="s-pass" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <div class="auth-row">
+          <label><input type="checkbox" name="remember"> Remember me</label>
+          <a class="link" href="index.html#contact">Forgot password?</a>
+        </div>
+        <span class="form-status small" id="signin-status" role="status"></span>
+        <button class="btn btn-primary btn-block" type="submit">Sign In</button>
+      </div>
+    </form>
+    <p class="auth-note">Need an account? Call <a class="link" href="tel:+16069236056">(606) 923-6056</a></p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span class="muted small">© <span id="year">2026</span> Horizontal Boring, Plus · South Shore, KY</span>
+  </div>
+</footer>
+
+<script>
+(() => {
+  // Point this at the login API once accounts exist. It should accept JSON
+  // { username, password, remember } and respond 2xx on success.
+  const SIGNIN_ENDPOINT = "";
+  const REDIRECT_TO = "index.html";
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  const form = document.getElementById("signin-form");
+  const status = document.getElementById("signin-status");
+  const btn = form.querySelector("button[type=submit]");
+  const setStatus = (msg, cls) => { status.textContent = msg; status.className = "form-status small " + (cls || "muted"); };
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const user = form.username.value.trim();
+    const pass = form.password.value;
+    form.username.closest(".field").classList.toggle("has-error", !user);
+    form.password.closest(".field").classList.toggle("has-error", !pass);
+    if (!user || !pass) { setStatus("Please enter username and password", "err"); return; }
+
+    if (!SIGNIN_ENDPOINT) { setStatus("Sign-in isn't available yet. Please call the office.", "err"); return; }
+
+    btn.disabled = true; btn.textContent = "Signing in…"; setStatus("");
+    try {
+      const res = await fetch(SIGNIN_ENDPOINT, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ username: user, password: pass, remember: form.remember.checked }),
+      });
+      if (!res.ok) throw new Error(res.status === 401 ? "Invalid username or password" : "Something went wrong. Please try again.");
+      window.location.href = REDIRECT_TO;
+    } catch (err) {
+      form.password.value = "";
+      setStatus(err.message || "Something went wrong. Please try again.", "err");
+    } finally {
+      btn.disabled = false; btn.textContent = "Sign In";
+    }
+  });
+
+  form.addEventListener("input", (e) => e.target.closest(".field")?.classList.remove("has-error"));
+})();
+</script>
+</body>
+</html>
