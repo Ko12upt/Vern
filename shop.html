@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Equipment Shop — Horizontal Boring, Plus</title>
+  <meta name="description" content="Rent auger boring machines, augers, cutting heads for dirt, mixed ground and rock, plus track, adapters and tooling. Build a rental request online.">
+  <meta name="theme-color" content="#18181c">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/app.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23378add' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23378add'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html" aria-label="Horizontal Boring, Plus — home">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="13" />
+        <circle cx="16" cy="16" r="7.5" />
+        <circle cx="16" cy="16" r="2.6" class="fill" />
+        <path d="M16 3v5.5M16 23.5V29M3 16h5.5M23.5 16H29" />
+      </svg>
+      <span class="brand-text">Horizontal Boring<span class="plus">, Plus</span></span>
+    </a>
+
+    <nav class="nav" id="nav" aria-label="Primary">
+      <a href="shop.html" class="is-current" aria-current="page">Shop</a>
+      <a href="index.html#contracting">Contracting</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="btn btn-primary btn-sm" id="open-request" type="button">
+        Request <span class="count-pill" id="request-count">0</span>
+      </button>
+      <a class="btn btn-ghost btn-sm" href="signin.html">Sign in</a>
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ─── Page head + ground matcher ─────────────────────── -->
+  <section class="page-hero">
+    <div class="hero-grid-lines" aria-hidden="true"></div>
+    <div class="wrap page-hero-inner">
+      <div>
+        <p class="eyebrow"><span class="dot"></span>Equipment shop</p>
+        <h1>The machine, the augers and the right head <span class="accent">for your ground.</span></h1>
+        <p class="lead">Build a rental request with everything your bore needs. Rentals bill every 28 days from the day equipment ships. We confirm availability and send your agreement before anything leaves the yard.</p>
+      </div>
+
+      <div class="panel matcher" aria-labelledby="matcher-title">
+        <div class="panel-head">
+          <div>
+            <h3 id="matcher-title">What's in the ground?</h3>
+            <p class="muted small">Pick your conditions and we'll show the cutting heads rated for it.</p>
+          </div>
+        </div>
+        <div class="ground-list" role="radiogroup" aria-label="Ground conditions" id="ground-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Catalog ─────────────────────────────────────────── -->
+  <section class="section shop-section">
+    <div class="wrap shop">
+      <aside class="shop-filters" aria-label="Filters">
+        <div class="field">
+          <label for="q">Search</label>
+          <input id="q" type="search" placeholder="Model, size, brand…" autocomplete="off">
+        </div>
+
+        <div class="filter-group">
+          <p class="filter-title">Category</p>
+          <div class="cat-list" id="cat-list"></div>
+        </div>
+
+        <div class="field">
+          <label for="size">Bore size</label>
+          <div class="select">
+            <select id="size">
+              <option value="">Any size</option>
+              <option value="0-24">Up to 24″</option>
+              <option value="25-36">30″–36″</option>
+              <option value="37-48">42″–48″</option>
+              <option value="49-99">54″–72″</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="check">
+          <input type="checkbox" id="avail-only"> Available now only
+        </label>
+
+        <div class="help-card">
+          <p class="small"><strong>Not sure what to rent?</strong></p>
+          <p class="muted small">Tell us the bore length, casing size and boring logs. We'll put the package together.</p>
+          <a class="link small" href="tel:+16063162630">(606) 316-2630 →</a>
+        </div>
+      </aside>
+
+      <div class="shop-main">
+        <div class="shop-toolbar">
+          <p class="muted small" id="result-count" aria-live="polite"></p>
+          <div class="ground-active" id="ground-active" hidden></div>
+          <div class="select select-sm">
+            <select id="sort" aria-label="Sort">
+              <option value="cat">Sort: Category</option>
+              <option value="size-asc">Size: small to large</option>
+              <option value="size-desc">Size: large to small</option>
+              <option value="name">Name A–Z</option>
+            </select>
+          </div>
+        </div>
+        <div class="product-grid" id="grid"></div>
+        <p class="empty muted" id="empty" hidden>Nothing matches those filters. <button class="link-btn" id="clear-filters" type="button">Clear filters</button></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span class="muted small">© <span id="year">2026</span> Horizontal Boring, Plus · South Shore, KY</span>
+    <nav class="footer-links">
+      <a href="shop.html">Shop</a>
+      <a href="index.html#contracting">Contracting</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- Product detail -->
+<dialog class="modal" id="product-modal" aria-labelledby="pm-title">
+  <form method="dialog" class="modal-inner" id="pm-form">
+    <button class="modal-close" value="cancel" aria-label="Close">×</button>
+    <div class="pm-media"><img id="pm-img" alt=""></div>
+    <div class="pm-body">
+      <p class="eyebrow" id="pm-cat"></p>
+      <h2 id="pm-title"></h2>
+      <p class="muted" id="pm-blurb"></p>
+      <div class="pm-ground" id="pm-ground"></div>
+      <dl class="spec-list" id="pm-specs"></dl>
+      <div class="pm-actions">
+        <div class="field" id="pm-option-field">
+          <label for="pm-option" id="pm-option-label">Size</label>
+          <div class="select"><select id="pm-option"></select></div>
+        </div>
+        <div class="field field-qty">
+          <label for="pm-qty">Qty</label>
+          <input id="pm-qty" type="number" min="1" value="1" inputmode="numeric">
+        </div>
+      </div>
+      <div class="pm-foot">
+        <span class="pm-rate" id="pm-rate"></span>
+        <button class="btn btn-primary" id="pm-add" value="add">Add to request</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<!-- Rental request drawer -->
+<dialog class="drawer" id="request-drawer" aria-labelledby="rq-title">
+  <form class="drawer-inner" id="request-form" novalidate>
+    <div class="drawer-head">
+      <div>
+        <p class="eyebrow" style="margin:0 0 4px">Rental request</p>
+        <h3 id="rq-title"><span id="rq-count">0</span> items</h3>
+      </div>
+      <button class="modal-close" type="button" data-close aria-label="Close">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <ul class="rq-items" id="rq-items"></ul>
+      <p class="muted small rq-empty" id="rq-empty">Nothing added yet. Browse the shop and add a machine, augers and a head.</p>
+
+      <div class="rq-section">
+        <p class="filter-title">Job</p>
+        <div class="form-grid">
+          <div class="field">
+            <label for="rq-start">Needed by *</label>
+            <input id="rq-start" name="start" type="date" required>
+          </div>
+          <div class="field">
+            <label for="rq-weeks">Est. rental length</label>
+            <div class="select">
+              <select id="rq-weeks" name="length">
+                <option>1 period (28 days)</option>
+                <option>2 periods (56 days)</option>
+                <option>3 periods (84 days)</option>
+                <option>Longer / not sure</option>
+              </select>
+            </div>
+          </div>
+          <div class="field field-full">
+            <label for="rq-site">Job site location *</label>
+            <input id="rq-site" name="site" type="text" placeholder="City, county, state or road crossing" required>
+          </div>
+          <div class="field">
+            <label for="rq-ground">Ground conditions</label>
+            <div class="select"><select id="rq-ground" name="ground"></select></div>
+          </div>
+          <div class="field">
+            <label for="rq-delivery">Delivery</label>
+            <div class="select">
+              <select id="rq-delivery" name="delivery">
+                <option>Deliver to site</option>
+                <option>Customer pickup at yard</option>
+              </select>
+            </div>
+          </div>
+          <div class="field field-full">
+            <label for="rq-notes">Bore details</label>
+            <textarea id="rq-notes" name="notes" rows="3" placeholder="Bore length, casing size and wall, depth, boring logs, rock strength if known…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="rq-section">
+        <p class="filter-title">Contact</p>
+        <div class="form-grid">
+          <div class="field"><label for="rq-name">Name *</label><input id="rq-name" name="name" autocomplete="name" required></div>
+          <div class="field"><label for="rq-business">Business</label><input id="rq-business" name="business" autocomplete="organization"></div>
+          <div class="field"><label for="rq-email">Email *</label><input id="rq-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="rq-phone">Phone</label><input id="rq-phone" name="phone" type="tel" autocomplete="tel"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-foot">
+      <span class="form-status small muted" id="rq-status" role="status"></span>
+      <button class="btn btn-primary" type="submit">Send request</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="assets/common.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/shop.js"></script>
+</body>
+</html>

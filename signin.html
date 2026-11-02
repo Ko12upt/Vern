@@ -57,6 +57,7 @@
       </div>
     </form>
     <p class="auth-note">Need an account? Call <a class="link" href="tel:+16069236056">(606) 923-6056</a></p>
+    <p class="auth-note">Design preview: sign in as <strong>owner</strong> for the back office, or any other name for the renter portal.</p>
   </div>
 </main>
 
@@ -88,7 +89,13 @@
     form.password.closest(".field").classList.toggle("has-error", !pass);
     if (!user || !pass) { setStatus("Please enter username and password", "err"); return; }
 
-    if (!SIGNIN_ENDPOINT) { setStatus("Sign-in isn't available yet. Please call the office.", "err"); return; }
+    // Design preview until accounts exist: "owner" opens the back office, anything else the renter portal.
+    if (!SIGNIN_ENDPOINT) {
+      const isOwner = /^(owner|admin|vernon|crystal)/i.test(user);
+      setStatus(`Preview: opening the ${isOwner ? "back office" : "renter portal"}…`, "ok");
+      window.location.href = isOwner ? "admin.html" : "portal.html";
+      return;
+    }
 
     btn.disabled = true; btn.textContent = "Signing in…"; setStatus("");
     try {
